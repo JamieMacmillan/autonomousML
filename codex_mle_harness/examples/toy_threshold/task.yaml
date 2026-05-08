@@ -1,0 +1,35 @@
+task_id: toy_threshold
+task_name: Toy Threshold Classification
+description_path: description.md
+data_mounts:
+  - source: data
+    target: input
+    read_only: true
+required_outputs:
+  - submission/predictions.csv
+entrypoint: run.py
+evaluator_command: python /task/evaluator.py
+evaluator_result_path: evaluator_result.json
+primary_metric_name: accuracy
+higher_is_better: true
+docker_image: python:3.12-slim
+attempt_timeout_seconds: 600
+evaluator_timeout_seconds: 120
+resources:
+  memory_limit: 1g
+  cpu_limit: 1.0
+  gpu_devices: null
+  artifact_size_limit_mb: 64
+stop_conditions:
+  max_attempts: 1
+  max_wall_clock_seconds: 900
+  target_metric_value: 1.0
+  plateau_rounds: 1
+scheduler:
+  beam_width: 1
+  round_size: 1
+  fresh_draft_fraction: 0.25
+  novelty_fraction: 0.25
+  failure_retry_fraction: 0.10
+planner:
+  type: static
